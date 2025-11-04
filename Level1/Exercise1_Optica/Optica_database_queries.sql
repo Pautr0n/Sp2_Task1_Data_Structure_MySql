@@ -1,4 +1,28 @@
--- Queries to test database
+-- Exercise 1 mandatory queries
+-- List the total number of invoices for a customer within a specific period
+SELECT c.name AS Customer, c.email, COUNT(so.sales_orders_id) AS Invoices, SUM(so.total_amount) AS Total_amount
+FROM sales_orders so
+JOIN customers c ON so.customers_id = c.customers_id
+WHERE c.name = 'Laura Martínez'
+  AND so.date BETWEEN '2025-01-01' AND '2025-12-31'
+GROUP BY c.name, c.email;
+
+-- List the different eyeglass models sold by an employee during a given year
+SELECT DISTINCT eg.brand, eg.frame_type, eg.frame_color
+FROM order_details od
+JOIN eyeglasses eg ON od.eyeglasses_id = eg.eyeglasses_id
+JOIN employee e ON od.employee_id = e.employee_id
+JOIN sales_orders so ON od.sales_orders_id = so.sales_orders_id
+WHERE e.full_name = 'María Hernández'
+  AND YEAR(so.date) = 2025;
+
+-- List the different suppliers who have provided eyeglasses that were successfully sold by the optician
+SELECT DISTINCT s.name AS proveïdor, s.vat
+FROM suppliers s
+JOIN eyeglasses eg ON s.suppliers_id = eg.suppliers_id
+JOIN order_details od ON eg.eyeglasses_id = od.eyeglasses_id;
+
+-- MoreQueries to test database
 -- Suppliers' addresses
 SELECT s.name, s.vat, a.street, a.str_number, a.floor, a.door, a.postalcode,  a.city, a.country
 FROM suppliers s
